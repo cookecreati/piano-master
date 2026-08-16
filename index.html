@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Interval Companion</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .piano-key {
+            transition: all 0.12s ease-in-out;
+            user-select: none;
+        }
+
+        .white-key:active,
+        .white-key.active {
+            background-color: #f1f5f9;
+            transform: translateY(2px);
+            box-shadow: inset 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .black-key:active,
+        .black-key.active {
+            background-color: #334155;
+            transform: translateY(2px);
+            box-shadow: inset 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+
+<header class="border-b border-slate-800 bg-slate-950/70 backdrop-blur sticky top-0 z-50 px-6 py-4 flex flex-wrap justify-between items-center gap-4">
+
+    <div class="flex items-center space-x-3">
+        <div class="bg-gradient-to-tr from-indigo-600 to-violet-500 p-2.5 rounded-xl text-white shadow-md shadow-indigo-500/10">
+            🎹
+        </div>
+
+        <div>
+            <h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                Piano Interval Companion
+                <span class="text-[11px] font-mono font-normal bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 px-2 py-0.5 rounded-full">
+                    Curriculum Level 2+
+                </span>
+            </h1>
+
+            <p class="text-xs text-slate-400">
+                Reinforcement &amp; Practice Supplement
+            </p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-4 sm:gap-6 bg-slate-900/90 px-4 py-2 rounded-xl border border-slate-800">
+
+        <div class="text-center sm:text-left">
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">
+                Total Score
+            </span>
+
+            <span id="global-score" class="text-lg font-bold text-emerald-400 font-mono">
+                0 <span class="text-xs font-normal text-slate-500">pts</span>
+            </span>
+        </div>
+
+        <div class="h-8 w-px bg-slate-800"></div>
+
+        <div class="text-center sm:text-left">
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">
+                Game Level
+            </span>
+
+            <span id="global-level" class="text-lg font-bold text-indigo-400 font-mono">
+                1
+            </span>
+        </div>
+
+        <div class="h-8 w-px bg-slate-800"></div>
+
+        <div class="text-center sm:text-left">
+            <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block">
+                Streak
+            </span>
+
+            <span id="global-streak" class="text-lg font-bold text-amber-400 font-mono">
+                0 🔥
+            </span>
+        </div>
+
+    </div>
+</header>
+
+<nav class="bg-slate-950/30 px-6 py-2 border-b border-slate-800/60 flex flex-wrap gap-1">
+
+    <button
+        id="tab-practice"
+        onclick="switchView('practice')"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold transition bg-indigo-600 text-white shadow-sm">
+        🎯 Practice Mode
+    </button>
+
+    <button
+        id="tab-challenge"
+        onclick="switchView('challenge')"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200">
+        ⚡ Challenge Mode
+    </button>
+
+    <button
+        id="tab-scalebook"
+        onclick="switchView('scalebook')"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200 relative">
+        📖 Scale Progress Book
+
+        <span
+            id="badge-scale-bonus"
+            class="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-rose-500 hidden">
+        </span>
+    </button>
+
+    <button
+        id="tab-teacher"
+        onclick="switchView('teacher')"
+        class="tab-btn px-4 py-2 rounded-lg text-xs font-semibold transition text-slate-400 hover:text-slate-200">
+        ⚙️ Teacher Dashboard
+    </button>
+
+</nav>
+
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+<div class="lg:col-span-8 flex flex-col gap-6">
+
+<!-- PRACTICE VIEW -->
+<section id="view-practice" class="view-section flex flex-col gap-6">
+
+    <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-6 shadow-md">
+
+        <div class="flex justify-between items-start mb-4">
+
+            <div>
+                <h2 class="text-lg font-bold text-slate-100">
+                    Low-Pressure Practice Sandbox
+                </h2>
+
+                <p class="text-xs text-slate-400">
+                    Explore intervals using student-controlled parameters.
+                </p>
+            </div>
+
+            <span class="text-xs bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-2 py-0.5 rounded font-mono">
+                Unlimited Mode
+            </span>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 mb-6">
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Interval Step
+                </label>
+
+                <div class="flex items-center space-x-3 bg-slate-950 p-2.5 rounded-lg border border-slate-800">
+
+                    <input
+                        type="range"
+                        id="practice-step-slider"
+                        min="1"
+                        max="7"
+                        value="2"
+                        oninput="runPracticeCalculationPipeline()"
+                        class="w-full accent-indigo-500">
+
+                    <span
+                        id="practice-step-display"
+                        class="bg-indigo-950/60 border border-indigo-800/50 text-indigo-400 text-xs font-mono font-bold px-2 py-1 rounded">
+                        2
+                    </span>
+
+                </div>
+            </div>
+
+            <div class="space-y-2">
+
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Direction
+                </label>
+
+                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
+
+                    <button
+                        id="prac-op-plus"
+                        onclick="setPracticeOperator('+')"
+                        class="flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white">
+                        +
+                    </button>
+
+                    <button
+                        id="prac-op-minus"
+                        onclick="setPracticeOperator('-')"
+                        class="flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400">
+                        −
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="space-y-2">
+
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Hand
+                </label>
+
+                <div class="flex bg-slate-950 p-1 rounded-lg border border-slate-800">
+
+                    <button
+                        id="prac-hand-rh"
+                        onclick="setPracticeHand('RH')"
+                        class="flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white">
+                        Right Hand
+                    </button>
+
+                    <button
+                        id="prac-hand-lh"
+                        onclick="setPracticeHand('LH')"
+                        class="flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400">
+                        Left Hand
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="space-y-2">
+
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Starting Finger
+                </label>
+
+                <div class="grid grid-cols-5 gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800">
+
+                    <button id="prac-finger-1" onclick="setPracticeFinger(1)" class="py-1 rounded text-xs font-bold bg-indigo-600 text-white">1</button>
+                    <button id="prac-finger-2" onclick="setPracticeFinger(2)" class="py-1 rounded text-xs font-bold text-slate-400">2</button>
+                    <button id="prac-finger-3" onclick="setPracticeFinger(3)" class="py-1 rounded text-xs font-bold text-slate-400">3</button>
+                    <button id="prac-finger-4" onclick="setPracticeFinger(4)" class="py-1 rounded text-xs font-bold text-slate-400">4</button>
+                    <button id="prac-finger-5" onclick="setPracticeFinger(5)" class="py-1 rounded text-xs font-bold text-slate-400">5</button>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-gradient-to-br from-indigo-950/30 to-slate-950 border border-slate-800 rounded-xl p-5 shadow-inner">
+
+            <div class="text-[10px] font-mono uppercase tracking-wider text-indigo-400 flex justify-between items-center mb-4">
+
+                <span>Interval Processing</span>
+
+                <span
+                    id="anatomy-finger-indicator"
+                    class="text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                    RH Thumb Active
+                </span>
+
+            </div>
+
+            <div class="flex items-baseline justify-center py-4 space-x-3 text-center">
+
+                <div class="flex flex-col items-center">
+                    <span id="prac-view-start-note" class="text-4xl font-black text-slate-100 font-mono">
+                        C
+                    </span>
+
+                    <span id="prac-view-start-finger" class="text-[10px] uppercase font-mono text-indigo-400 mt-1">
+                        Finger 1
+                    </span>
+                </div>
+
+                <span id="prac-view-op" class="text-2xl font-bold text-indigo-500 font-mono">
+                    +
+                </span>
+
+                <div class="flex flex-col items-center">
+
+                    <span id="prac-view-steps" class="text-4xl font-black text-slate-100 font-mono">
+                        2
+                    </span>
+
+                    <span class="text-[10px] uppercase font-mono text-slate-500 mt-1">
+                        Steps
+                    </span>
+
+                </div>
+
+                <span class="text-3xl font-light text-slate-600 font-mono">
+                    =
+                </span>
+
+                <div class="bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-700 shadow-md flex flex-col items-center min-w-[70px]">
+
+                    <span id="prac-view-result-note" class="text-4xl font-black text-emerald-400 font-mono">
+                        E
+                    </span>
+
+                    <span id="prac-view-result-finger" class="text-[10px] uppercase font-mono text-slate-400 mt-1">
+                        Finger 3
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="border-t border-slate-900 mt-4 pt-3 text-xs space-y-2">
+
+                <div class="flex justify-between text-slate-400">
+                    <span>Sequence:</span>
+
+                    <span id="prac-view-sequence" class="font-mono text-slate-200">
+                        C → D → E
+                    </span>
+                </div>
+
+                <div class="flex justify-between text-slate-400">
+                    <span>Interval:</span>
+
+                    <span id="prac-view-interval-label" class="font-mono text-indigo-300">
+                        Third (Ascending)
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CHALLENGE VIEW -->
+<section id="view-challenge" class="view-section hidden flex flex-col gap-6">
+
+    <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-6 shadow-md">
+
+        <div class="flex flex-wrap justify-between items-start gap-2 mb-4">
+
+            <div>
+                <h2 class="text-lg font-bold text-slate-100">
+                    Gamified Challenge Mode
+                </h2>
+
+                <p class="text-xs text-slate-400">
+                    Answer interval questions as quickly and accurately as possible.
+                </p>
+            </div>
+
+            <div class="flex gap-2">
+
+                <div class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg text-right">
+                    <span class="text-[9px] font-mono uppercase text-slate-500 block">
+                        Timer
+                    </span>
+
+                    <span id="challenge-timer" class="text-sm font-bold text-amber-400 font-mono">
+                        30s
+                    </span>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg text-right">
+                    <span class="text-[9px] font-mono uppercase text-slate-500 block">
+                        Best Streak
+                    </span>
+
+                    <span id="challenge-best-streak" class="text-sm font-bold text-indigo-400 font-mono">
+                        0
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div
+            id="challenge-stage-card"
+            class="bg-slate-900 border border-slate-800 rounded-xl p-6 text-center my-4 min-h-[160px] flex flex-col justify-center items-center">
+
+            <div class="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-3">
+                Active Interactive Objective
+            </div>
+
+            <div
+                id="challenge-prompt-text"
+                class="text-2xl font-black text-slate-100 font-mono tracking-wide">
+                Game Simulation Suspended
+            </div>
+
+            <p
+                id="challenge-prompt-subtext"
+                class="text-xs text-slate-400 max-w-md mt-2">
+                Start a challenge session to begin.
+            </p>
+
+        </div>
+
+        <div
+            id="challenge-alert-banner"
+            class="hidden rounded-xl p-3.5 text-xs text-center border font-medium transition-all mb-4">
+        </div>
+
+        <button
+            id="btn-challenge-toggle"
+            onclick="toggleChallengeSession()"
+            class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition shadow-lg">
+            Initiate Active Session
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- SCALE BOOK -->
+<section id="view-scalebook" class="view-section hidden flex flex-col gap-6">
+
+    <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-6 shadow-md">
+
+        <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
+
+            <div>
+                <h2 class="text-lg font-bold text-slate-100">
+                    Musical Scale Progress Book
+                </h2>
+
+                <p class="text-xs text-slate-400">
+                    Unlock scale degrees through successful challenge performance.
+                </p>
+            </div>
+
+            <div class="text-right bg-slate-900 border border-slate-800 rounded-lg p-2">
+
+                <span class="text-[9px] font-mono text-slate-500 block uppercase">
+                    Bonus Progress
+                </span>
+
+                <span id="bonus-countdown" class="text-xs font-mono font-bold text-indigo-400">
+                    0 / 10 Answers
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-5 mb-6">
+
+            <div class="flex justify-between items-center mb-3">
+
+                <h3 class="text-sm font-bold text-indigo-400">
+                    Active Map: C Major Scale
+                </h3>
+
+                <span
+                    id="scalebook-completion-status"
+                    class="text-xs font-semibold text-amber-400 bg-amber-400/5 border border-amber-400/20 px-2 py-0.5 rounded">
+                    5 / 8 Notes Unlocked
+                </span>
+
+            </div>
+
+            <div
+                class="grid grid-cols-4 sm:grid-cols-8 gap-2"
+                id="scale-notes-grid">
+            </div>
+
+            <div
+                id="scale-complete-banner"
+                class="hidden mt-4 bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-center text-xs text-amber-300 font-semibold">
+                🎉 Scale Complete! C Major Framework Mastered.
+            </div>
+
+        </div>
+
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+            Curriculum Sequence Map
+        </h3>
+
+        <div class="overflow-x-auto custom-scrollbar">
+
+            <table class="w-full text-left border-collapse text-xs">
+
+                <thead>
+                    <tr class="border-b border-slate-800 text-slate-500">
+                        <th class="py-2">Family Group</th>
+                        <th class="py-2">Scale Formula</th>
+                        <th class="py-2 text-center">Status</th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-800/40 text-slate-300 font-mono">
+
+                    <tr>
+                        <td class="py-2 text-white font-sans font-semibold">
+                            C Major Core
+                        </td>
+
+                        <td class="py-2 text-indigo-400">
+                            C - D - E - F - G - A - B - C
+                        </td>
+
+                        <td class="py-2 text-center text-emerald-400">
+                            Active
+                        </td>
+                    </tr>
+
+                    <tr class="opacity-50">
+                        <td class="py-2 font-sans font-semibold">
+                            Natural Minor
+                        </td>
+
+                        <td class="py-2 text-slate-400">
+                            A - B - C - D - E - F - G - A
+                        </td>
+
+                        <td class="py-2 text-center text-slate-500">
+                            Locked
+                        </td>
+                    </tr>
+
+                    <tr class="opacity-50">
+                        <td class="py-2 font-sans font-semibold">
+                            Sharp Family
+                        </td>
+
+                        <td class="py-2 text-slate-400">
+                            G Major / D Major
+                        </td>
+
+                        <td class="py-2 text-center text-slate-500">
+                            Locked
+                        </td>
+                    </tr>
+
+                    <tr class="opacity-50">
+                        <td class="py-2 font-sans font-semibold">
+                            Flat Family
+                        </td>
+
+                        <td class="py-2 text-slate-400">
+                            F Major / Bb Major
+                        </td>
+
+                        <td class="py-2 text-center text-slate-500">
+                            Locked
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TEACHER DASHBOARD -->
+<section id="view-teacher" class="view-section hidden flex flex-col gap-6">
+
+    <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-6 shadow-md">
+
+        <div class="border-b border-slate-800 pb-3 mb-4">
+
+            <h2 class="text-lg font-bold text-slate-100">
+                Teacher Control Panel
+            </h2>
+
+            <p class="text-xs text-slate-400">
+                Adjust curriculum restrictions and view basic performance diagnostics.
+            </p>
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div class="space-y-4">
+
+                <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest border-b border-slate-900 pb-1">
+                    Curriculum Restrictions
+                </h3>
+
+                <div class="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+
+                    <div>
+                        <span class="text-xs font-semibold block text-slate-200">
+                            Unlock Chromatic Mode
+                        </span>
+
+                        <span class="text-[10px] text-slate-500 block">
+                            Introduces sharps into challenge questions.
+                        </span>
+                    </div>
+
+                    <label class="relative inline-flex items-center cursor-pointer">
+
+                        <input
+                            type="checkbox"
+                            id="teacher-lock-chromatic"
+                            onchange="toggleTeacherChromaticSetting()"
+                            class="sr-only peer">
+
+                        <div class="w-9 h-5 bg-slate-800 rounded-full peer peer-checked:bg-indigo-600">
+                        </div>
+
+                    </label>
+
+                </div>
+
+                <div class="space-y-2">
+
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase">
+                        Keyboard Range
+                    </label>
+
+                    <select
+                        id="teacher-range-select"
+                        onchange="updateTeacherRangeConstraint()"
+                        class="w-full bg-slate-950 border border-slate-800 text-xs rounded-lg p-2.5 text-slate-300">
+
+                        <option value="5finger">
+                            Five-Finger Position
+                        </option>
+
+                        <option value="extended">
+                            Extended Position
+                        </option>
+
+                        <option value="octave">
+                            Full Octave
+                        </option>
+
+                        <option value="free">
+                            Free Range
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="space-y-4">
+
+                <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest border-b border-slate-900 pb-1">
+                    Telemetry Diagnostics
+                </h3>
+
+                <div class="bg-slate-900/40 p-4 rounded-xl border border-slate-800 space-y-3 text-xs font-mono">
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">
+                            Response Accuracy:
+                        </span>
+
+                        <span id="telemetry-accuracy" class="text-emerald-400 font-bold">
+                            100%
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">
+                            Current Score:
+                        </span>
+
+                        <span id="teacher-score-display" class="text-indigo-400">
+                            0
+                        </span>
+                    </div>
+
+                    <div class="flex justify-between">
+                        <span class="text-slate-400">
+                            Best Streak:
+                        </span>
+
+                        <span id="teacher-streak-display" class="text-indigo-400">
+                            0
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+                    💡 <strong class="text-slate-200">
+                        Educational Design Principle:
+                    </strong>
+                    Game progression and musical curriculum progression are kept separate so students can practice without accidentally bypassing teacher-controlled material.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+
+
+<!-- RIGHT SIDEBAR -->
+<div class="lg:col-span-4 flex flex-col gap-4 h-full">
+
+    <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-4 shadow-sm flex flex-col justify-between h-full min-h-[320px]">
+
+        <div>
+
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2 flex justify-between items-center">
+
+                <span>
+                    Application Activity
+                </span>
+
+                <button
+                    onclick="clearSystemTerminalLogs()"
+                    class="text-[10px] text-indigo-400 underline">
+                    Clear
+                </button>
+
+            </h3>
+
+            <div
+                id="system-terminal-logs"
+                class="text-[11px] font-mono space-y-1.5 h-64 overflow-y-auto custom-scrollbar text-slate-400 bg-slate-950/80 p-3 rounded-xl border border-slate-900 shadow-inner">
+
+                <div>
+                    <span class="text-slate-600">
+                        [00:00:00]
+                    </span>
+                    Piano Interval Companion initialized.
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800/60">
+
+            <h4 class="text-[10px] uppercase font-mono tracking-wider text-slate-500 mb-2">
+                Finger Position Reference
+            </h4>
+
+            <div
+                id="anatomy-reference-card"
+                class="bg-slate-900/60 border border-slate-800 rounded-lg p-2.5 text-xs">
+
+                <div class="flex justify-between font-bold text-slate-300 mb-1">
+
+                    <span id="anatomy-card-hand">
+                        Right Hand
+                    </span>
+
+                    <span id="anatomy-card-finger" class="text-indigo-400">
+                        Finger 1
+                    </span>
+
+                </div>
+
+                <div
+                    id="anatomy-card-desc"
+                    class="text-slate-400 text-[11px]">
+                    Thumb position.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<!-- PIANO -->
+<footer class="bg-slate-950 border-t border-slate-800 p-6 shadow-2xl mt-auto">
+
+    <div class="max-w-4xl mx-auto flex flex-col gap-3">
+
+        <div class="flex flex-wrap justify-between items-center text-xs text-slate-400">
+
+            <div class="flex items-center space-x-4">
+
+                <span class="font-bold text-slate-300">
+                    Interactive Piano
+                </span>
+
+                <span>
+                    🟣 Starting Note
+                </span>
+
+                <span>
+                    🟢 Target Note
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="relative flex justify-center bg-slate-900/80 p-4 rounded-xl border border-slate-800/80 max-w-2xl mx-auto w-full">
+
+            <div
+                class="relative w-full"
+                id="piano-keys-frame"
+                style="height: 140px;">
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- BONUS MODAL -->
+<div
+    id="bonus-modal-overlay"
+    class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+
+    <div class="bg-slate-900 border border-indigo-500/40 rounded-2xl max-w-md w-full p-6 shadow-2xl">
+
+        <div class="flex items-center space-x-3 text-amber-400 mb-3">
+
+            <span class="text-2xl">
+                ⭐
+            </span>
+
+            <h3 class="text-base font-bold text-white uppercase tracking-wider">
+                Scale Milestone!
+            </h3>
+
+        </div>
+
+        <p
+            id="bonus-question-text"
+            class="text-xs text-slate-300 leading-relaxed mb-4 bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono">
+            Identify the next note in the C Major scale.
+        </p>
+
+        <div
+            class="grid grid-cols-4 gap-2 mb-4"
+            id="bonus-choices-box">
+        </div>
+
+        <div
+            id="bonus-modal-feedback"
+            class="text-xs font-semibold text-center py-2 hidden rounded">
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const ALPHABET_NATURAL_NOTES = [
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'A',
+    'B'
+];
+
+const INSTRUMENT_KEYBOARD_LAYOUT = [
+    { note: 'C', isBlack: false },
+    { note: 'C#', isBlack: true },
+    { note: 'D', isBlack: false },
+    { note: 'D#', isBlack: true },
+    { note: 'E', isBlack: false },
+    { note: 'F', isBlack: false },
+    { note: 'F#', isBlack: true },
+    { note: 'G', isBlack: false },
+    { note: 'G#', isBlack: true },
+    { note: 'A', isBlack: false },
+    { note: 'A#', isBlack: true },
+    { note: 'B', isBlack: false },
+    { note: 'C2', isBlack: false },
+    { note: 'C#2', isBlack: true },
+    { note: 'D2', isBlack: false },
+    { note: 'D#2', isBlack: true },
+    { note: 'E2', isBlack: false },
+    { note: 'F2', isBlack: false },
+    { note: 'F#2', isBlack: true },
+    { note: 'G2', isBlack: false },
+    { note: 'G#2', isBlack: true },
+    { note: 'A2', isBlack: false },
+    { note: 'A#2', isBlack: true },
+    { note: 'B2', isBlack: false }
+];
+
+const AUDIO_FREQUENCY_REFERENCE_MAP = {
+    'C': 261.63,
+    'C#': 277.18,
+    'D': 293.66,
+    'D#': 311.13,
+    'E': 329.63,
+    'F': 349.23,
+    'F#': 369.99,
+    'G': 392.00,
+    'G#': 415.30,
+    'A': 440.00,
+    'A#': 466.16,
+    'B': 493.88,
+    'C2': 523.25,
+    'C#2': 554.37,
+    'D2': 587.33,
+    'D#2': 622.25,
+    'E2': 659.25,
+    'F2': 698.46,
+    'F#2': 739.99,
+    'G2': 783.99,
+    'G#2': 830.61,
+    'A2': 880.00,
+    'A#2': 932.33,
+    'B2': 987.77
+};
+
+let appActiveView = 'practice';
+
+let studentPointsScore = 0;
+let studentGameLevel = 1;
+let studentStreakCount = 0;
+let bestStreakRecord = 0;
+
+let answersSinceLastBonus = 0;
+let isBonusModalActive = false;
+
+let practiceRootNote = 'C';
+let practiceOperator = '+';
+let practiceStepValue = 2;
+let practiceHandOrientation = 'RH';
+let practiceSelectedFinger = 1;
+
+let challengeSessionActive = false;
+let challengeTimeRemaining = 30;
+let challengeTimerIntervalId = null;
+let activeChallengeTargetNote = '';
+
+let unlockedScaleDegreesCount = 5;
+
+const totalCmajorScaleNotes = [
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'A',
+    'B',
+    'C2'
+];
+
+let teacherUnlockedChromaticMode = false;
+let teacherKeyboardRangeRestriction = '5finger';
+
+let webAudioContextInstance = null;
+
+
+/* INITIALIZE */
+
+window.addEventListener('DOMContentLoaded', () => {
+
+    renderDynamicPianoComponent();
+
+    runPracticeCalculationPipeline();
+
+    renderScaleBookVisualGrid();
+
+    syncAnatomyReferenceDisplay();
+
+    refreshGlobalScoreboardCounters();
+
+    logToSystemConsole('[SYSTEM] Ready for piano practice.');
+
+});
+
+
+/* VIEW SWITCHING */
+
+function switchView(targetViewID) {
+
+    appActiveView = targetViewID;
+
+    document.querySelectorAll('.view-section').forEach(section => {
+        section.classList.add('hidden');
+    });
+
+    const targetSection = document.getElementById(`view-${targetViewID}`);
+
+    if (targetSection) {
+        targetSection.classList.remove('hidden');
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+
+        btn.classList.remove(
+            'bg-indigo-600',
+            'text-white',
+            'shadow-sm'
+        );
+
+        btn.classList.add(
+            'text-slate-400',
+            'hover:text-slate-200'
+        );
+
+    });
+
+    const activeTab = document.getElementById(`tab-${targetViewID}`);
+
+    if (activeTab) {
+
+        activeTab.classList.remove(
+            'text-slate-400',
+            'hover:text-slate-200'
+        );
+
+        activeTab.classList.add(
+            'bg-indigo-600',
+            'text-white',
+            'shadow-sm'
+        );
+    }
+
+    clearVisualHighlightsAcrossPianoKeys();
+
+    if (targetViewID === 'practice') {
+
+        runPracticeCalculationPipeline();
+
+    }
+
+    if (targetViewID !== 'challenge' && challengeSessionActive) {
+
+        stopChallengeSession();
+
+    }
+
+    logToSystemConsole(
+        `[UI] Opened ${targetViewID} mode.`
+    );
+}
+
+
+/* AUDIO */
+
+function safetyTriggerAudioEngine() {
+
+    if (!webAudioContextInstance) {
+
+        webAudioContextInstance =
+            new (window.AudioContext || window.webkitAudioContext)();
+
+    }
+
+}
+
+function triggerOrganicAudioTone(mappedNoteString) {
+
+    try {
+
+        safetyTriggerAudioEngine();
+
+        const frequency =
+            AUDIO_FREQUENCY_REFERENCE_MAP[mappedNoteString];
+
+        if (!frequency) return;
+
+        const oscillator =
+            webAudioContextInstance.createOscillator();
+
+        const gain =
+            webAudioContextInstance.createGain();
+
+        oscillator.type = 'sine';
+
+        oscillator.frequency.setValueAtTime(
+            frequency,
+            webAudioContextInstance.currentTime
+        );
+
+        gain.gain.setValueAtTime(
+            0.14,
+            webAudioContextInstance.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            webAudioContextInstance.currentTime + 0.5
+        );
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            webAudioContextInstance.destination
+        );
+
+        oscillator.start();
+
+        oscillator.stop(
+            webAudioContextInstance.currentTime + 0.5
+        );
+
+    } catch (error) {
+
+        logToSystemConsole(
+            `[AUDIO] ${error.message}`
+        );
+
+    }
+
+}
+
+
+/* PIANO */
+
+function renderDynamicPianoComponent() {
+
+    const container =
+        document.getElementById('piano-keys-frame');
+
+    container.innerHTML = '';
+
+    const totalWhiteKeys =
+        INSTRUMENT_KEYBOARD_LAYOUT.filter(
+            key => !key.isBlack
+        ).length;
+
+    let whiteIndex = 0;
+
+    INSTRUMENT_KEYBOARD_LAYOUT.forEach(keyData => {
+
+        const button =
+            document.createElement('button');
+
+        button.setAttribute(
+            'data-piano-note-id',
+            keyData.note
+        );
+
+        if (!keyData.isBlack) {
+
+            button.className =
+                'piano-key white-key bg-white border border-slate-200 rounded-b-md flex flex-col justify-end pb-2 items-center text-slate-800 font-mono text-[10px] font-bold z-10 shadow-sm';
+
+            button.style.width =
+                `${100 / totalWhiteKeys}%`;
+
+            button.style.height = '100%';
+
+            button.style.left =
+                `${(whiteIndex * 100) / totalWhiteKeys}%`;
+
+            button.style.position = 'absolute';
+
+            button.innerHTML =
+                `<span>${keyData.note.replace('2', '')}</span>`;
+
+            whiteIndex++;
+
+        } else {
+
+            button.className =
+                'piano-key black-key bg-slate-950 border border-slate-900 rounded-b-sm z-20 flex flex-col justify-end pb-1 items-center text-slate-400 font-mono text-[7px]';
+
+            const leftOffset =
+                ((whiteIndex - 1) * 100) / totalWhiteKeys;
+
+            const blackWidth =
+                (100 / totalWhiteKeys) * 0.64;
+
+            button.style.width =
+                `${blackWidth}%`;
+
+            button.style.height = '62%';
+
+            button.style.left =
+                `${leftOffset + (100 / totalWhiteKeys) * 0.68}%`;
+
+            button.style.position = 'absolute';
+
+            button.innerHTML =
+                `<span>${keyData.note.replace('2', '')}</span>`;
+        }
+
+        button.onclick = () =>
+            interceptPianoKeyTapEvent(keyData.note);
+
+        container.appendChild(button);
+
+    });
+
+}
+
+
+function interceptPianoKeyTapEvent(tappedNoteIdentifier) {
+
+    triggerOrganicAudioTone(tappedNoteIdentifier);
+
+    const cleanNote =
+        tappedNoteIdentifier.replace('2', '');
+
+    if (isBonusModalActive) return;
+
+    if (appActiveView === 'challenge') {
+
+        if (!challengeSessionActive) {
+
+            logToSystemConsole(
+                '[INPUT] Start a challenge session first.'
+            );
+
+            return;
+        }
+
+        evaluateSubmittedChallengeAnswer(cleanNote);
+
+    } else if (appActiveView === 'practice') {
+
+        if (tappedNoteIdentifier.includes('#')) {
+
+            logToSystemConsole(
+                '[INPUT] Sharp keys are disabled in basic practice.'
+            );
+
+            return;
+        }
+
+        practiceRootNote =
+            tappedNoteIdentifier;
+
+        runPracticeCalculationPipeline();
+
+    }
+
+}
+
+
+/* PRACTICE */
+
+function setPracticeOperator(operator) {
+
+    practiceOperator = operator;
+
+    const plusButton =
+        document.getElementById('prac-op-plus');
+
+    const minusButton =
+        document.getElementById('prac-op-minus');
+
+    if (operator === '+') {
+
+        plusButton.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white';
+
+        minusButton.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400';
+
+    } else {
+
+        minusButton.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white';
+
+        plusButton.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400';
+
+    }
+
+    runPracticeCalculationPipeline();
+
+}
+
+
+function setPracticeHand(hand) {
+
+    practiceHandOrientation = hand;
+
+    const rh =
+        document.getElementById('prac-hand-rh');
+
+    const lh =
+        document.getElementById('prac-hand-lh');
+
+    if (hand === 'RH') {
+
+        rh.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white';
+
+        lh.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400';
+
+    } else {
+
+        lh.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold bg-indigo-600 text-white';
+
+        rh.className =
+            'flex-1 py-1.5 rounded-md text-xs font-bold text-slate-400';
+
+    }
+
+    syncAnatomyReferenceDisplay();
+
+    runPracticeCalculationPipeline();
+
+}
+
+
+function setPracticeFinger(finger) {
+
+    practiceSelectedFinger = finger;
+
+    for (let i = 1; i <= 5; i++) {
+
+        const button =
+            document.getElementById(`prac-finger-${i}`);
+
+        if (i === finger) {
+
+            button.className =
+                'py-1 rounded text-xs font-bold bg-indigo-600 text-white';
+
+        } else {
+
+            button.className =
+                'py-1 rounded text-xs font-bold text-slate-400';
+
+        }
+
+    }
+
+    syncAnatomyReferenceDisplay();
+
+    runPracticeCalculationPipeline();
+
+}
+
+
+function syncAnatomyReferenceDisplay() {
+
+    const names = {
+        1: 'Thumb',
+        2: 'Index Finger',
+        3: 'Middle Finger',
+        4: 'Ring Finger',
+        5: 'Pinky Finger'
+    };
+
+    const fingerName =
+        names[practiceSelectedFinger];
+
+    document.getElementById(
+        'anatomy-card-hand'
+    ).innerText =
+        practiceHandOrientation === 'RH'
+            ? 'Right Hand'
+            : 'Left Hand';
+
+    document.getElementById(
+        'anatomy-card-finger'
+    ).innerText =
+        `Finger ${practiceSelectedFinger} - ${fingerName}`;
+
+    document.getElementById(
+        'anatomy-finger-indicator'
+    ).innerText =
+        `${practiceHandOrientation} ${fingerName} Active`;
+
+    document.getElementById(
+        'anatomy-card-desc'
+    ).innerText =
+        practiceHandOrientation === 'RH'
+            ? 'Right hand: Thumb begins at the left side of the five-finger position.'
+            : 'Left hand: Finger numbering is mirrored across the five-finger position.';
+
+}
+
+
+function runPracticeCalculationPipeline() {
+
+    const slider =
+        document.getElementById('practice-step-slider');
+
+    if (!slider) return;
+
+    practiceStepValue =
+        parseInt(slider.value);
+
+    document.getElementById(
+        'practice-step-display'
+    ).innerText =
+        practiceStepValue;
+
+    const root =
+        practiceRootNote.replace('2', '');
+
+    document.getElementById(
+        'prac-view-start-note'
+    ).innerText =
+        root;
+
+    document.getElementById(
+        'prac-view-op'
+    ).innerText =
+        practiceOperator;
+
+    document.getElementById(
+        'prac-view-steps'
+    ).innerText =
+        practiceStepValue;
+
+    document.getElementById(
+        'prac-view-start-finger'
+    ).innerText =
+        `Finger ${practiceSelectedFinger}`;
+
+    const rootIndex =
+        ALPHABET_NATURAL_NOTES.indexOf(root);
+
+    let resultIndex;
+
+    if (practiceOperator === '+') {
+
+        resultIndex =
+            (rootIndex + practiceStepValue) % 7;
+
+    } else {
+
+        resultIndex =
+            (rootIndex - practiceStepValue + 70) % 7;
+
+    }
+
+    const resultNote =
+        ALPHABET_NATURAL_NOTES[resultIndex];
+
+    document.getElementById(
+        'prac-view-result-note'
+    ).innerText =
+        resultNote;
+
+    let targetFinger;
+
+    if (practiceHandOrientation === 'RH') {
+
+        targetFinger =
+            practiceSelectedFinger +
+            (practiceOperator === '+'
+                ? practiceStepValue
+                : -practiceStepValue);
+
+    } else {
+
+        targetFinger =
+            practiceSelectedFinger -
+            (practiceOperator === '+'
+                ? practiceStepValue
+                : -practiceStepValue);
+
+    }
+
+    document.getElementById(
+        'prac-view-result-finger'
+    ).innerText =
+        targetFinger >= 1 && targetFinger <= 5
+            ? `Finger ${targetFinger}`
+            : 'Outside Position';
+
+    const sequence = [];
+
+    for (
+        let offset = 0;
+        offset <= practiceStepValue;
+        offset++
+    ) {
+
+        let index;
+
+        if (practiceOperator === '+') {
+
+            index =
+                (rootIndex + offset) % 7;
+
+        } else {
+
+            index =
+                (rootIndex - offset + 70) % 7;
+
+        }
+
+        sequence.push(
+            ALPHABET_NATURAL_NOTES[index]
+        );
+
+    }
+
+    document.getElementById(
+        'prac-view-sequence'
+    ).innerText =
+        sequence.join(' → ');
+
+    const intervalNames = [
+        'Unison',
+        'Second',
+        'Third',
+        'Fourth',
+        'Fifth',
+        'Sixth',
+        'Seventh'
+    ];
+
+    document.getElementById(
+        'prac-view-interval-label'
+    ).innerText =
+        `${intervalNames[practiceStepValue % 7]} (${practiceOperator === '+' ? 'Ascending' : 'Descending'})`;
+
+    applyVisualKeyHighlights(
+        practiceRootNote,
+        resultNote
+    );
+
+}
+
+
+function applyVisualKeyHighlights(
+    startNote,
+    destinationNote
+) {
+
+    clearVisualHighlightsAcrossPianoKeys();
+
+    document.querySelectorAll('.piano-key')
+        .forEach(key => {
+
+            const note =
+                key.getAttribute(
+                    'data-piano-note-id'
+                );
+
+            if (
+                note === startNote ||
+                note === startNote + '2'
+            ) {
+
+                key.style.backgroundColor =
+                    '#6366f1';
+
+                key.style.color =
+                    '#ffffff';
+
+            }
+
+            if (
+                destinationNote &&
+                (
+                    note === destinationNote ||
+                    note === destinationNote + '2'
+                )
+            ) {
+
+                key.style.backgroundColor =
+                    '#10b981';
+
+                key.style.color =
+                    '#ffffff';
+
+            }
+
+        });
+
+}
+
+
+function clearVisualHighlightsAcrossPianoKeys() {
+
+    document.querySelectorAll('.piano-key')
+        .forEach(key => {
+
+            const black =
+                key.classList.contains(
+                    'black-key'
+                );
+
+            if (black) {
+
+                key.style.backgroundColor =
+                    '#0f172a';
+
+                key.style.color =
+                    '#94a3b8';
+
+            } else {
+
+                key.style.backgroundColor =
+                    '#ffffff';
+
+                key.style.color =
+                    '#1e293b';
+
+            }
+
+        });
+
+}
+
+
+/* CHALLENGE */
+
+function toggleChallengeSession() {
+
+    if (challengeSessionActive) {
+
+        stopChallengeSession();
+
+    } else {
+
+        startChallengeSession();
+
+    }
+
+}
+
+
+function startChallengeSession() {
+
+    challengeSessionActive = true;
+
+    challengeTimeRemaining = 30;
+
+    const button =
+        document.getElementById(
+            'btn-challenge-toggle'
+        );
+
+    button.innerText =
+        'End Session';
+
+    button.classList.remove(
+        'bg-indigo-600',
+        'hover:bg-indigo-500'
+    );
+
+    button.classList.add(
+        'bg-rose-600',
+        'hover:bg-rose-500'
+    );
+
+    document.getElementById(
+        'challenge-timer'
+    ).innerText =
+        '30s';
+
+    logToSystemConsole(
+        '[CHALLENGE] Session started.'
+    );
+
+    refreshChallengeObjectivePrompt();
+
+    challengeTimerIntervalId =
+        setInterval(() => {
+
+            challengeTimeRemaining--;
+
+            document.getElementById(
+                'challenge-timer'
+            ).innerText =
+                `${challengeTimeRemaining}s`;
+
+            if (
+                challengeTimeRemaining <= 0
+            ) {
+
+                finalizeChallengeSessionDueToTimeout();
+
+            }
+
+        }, 1000);
+
+}
+
+
+function stopChallengeSession() {
+
+    challengeSessionActive = false;
+
+    if (challengeTimerIntervalId) {
+
+        clearInterval(
+            challengeTimerIntervalId
+        );
+
+        challengeTimerIntervalId = null;
+
+    }
+
+    const button =
+        document.getElementById(
+            'btn-challenge-toggle'
+        );
+
+    button.innerText =
+        'Initiate Active Session';
+
+    button.classList.remove(
+        'bg-rose-600',
+        'hover:bg-rose-500'
+    );
+
+    button.classList.add(
+        'bg-indigo-600',
+        'hover:bg-indigo-500'
+    );
+
+    document.getElementById(
+        'challenge-prompt-text'
+    ).innerText =
+        'Game Simulation Suspended';
+
+    document.getElementById(
+        'challenge-prompt-subtext'
+    ).innerText =
+        'Start a challenge session to begin.';
+
+    clearVisualHighlightsAcrossPianoKeys();
+
+}
+
+
+function finalizeChallengeSessionDueToTimeout() {
+
+    stopChallengeSession();
+
+    document.getElementById(
+        'challenge-prompt-text'
+    ).innerText =
+        'Time!';
+
+    document.getElementById(
+        'challenge-prompt-subtext'
+    ).innerText =
+        `Your current score is ${studentPointsScore} points.`;
+
+    logToSystemConsole(
+        '[CHALLENGE] Session completed.'
+    );
+
+}
+
+
+function refreshChallengeObjectivePrompt() {
+
+    if (!challengeSessionActive) return;
+
+    let pool = [
+        'C',
+        'D',
+        'E',
+        'F',
+        'G'
+    ];
+
+    if (teacherUnlockedChromaticMode) {
+
+        pool = [
+            'C',
+            'C#',
+            'D',
+            'D#',
+            'E',
+            'F',
+            'F#',
+            'G',
+            'G#',
+            'A',
+            'A#',
+            'B'
+        ];
+
+    } else {
+
+        for (
+            let i = 5;
+            i < unlockedScaleDegreesCount;
+            i++
+        ) {
+
+            const note =
+                totalCmajorScaleNotes[i];
+
+            if (note) {
+
+                pool.push(
+                    note.replace('2', '')
+                );
+
+            }
+
+        }
+
+    }
+
+    const startNote =
+        pool[
+            Math.floor(
+                Math.random() * pool.length
+            )
+        ];
+
+    const operator =
+        Math.random() > 0.4
+            ? '+'
+            : '-';
+
+    const steps =
+        Math.floor(
+            Math.random() * 4
+        ) + 1;
+
+    const cleanStart =
+        startNote.replace('#', '');
+
+    const startIndex =
+        ALPHABET_NATURAL_NOTES.indexOf(
+            cleanStart
+        );
+
+    let targetIndex;
+
+    if (operator === '+') {
+
+        targetIndex =
+            (startIndex + steps) % 7;
+
+    } else {
+
+        targetIndex =
+            (startIndex - steps + 70) % 7;
+
+    }
+
+    activeChallengeTargetNote =
+        ALPHABET_NATURAL_NOTES[
+            targetIndex
+        ];
+
+    document.getElementById(
+        'challenge-prompt-text'
+    ).innerText =
+        `${startNote} ${operator} ${steps} = ?`;
+
+    document.getElementById(
+        'challenge-prompt-subtext'
+    ).innerText =
+        'Calculate the destination note and click it on the piano.';
+
+    applyVisualKeyHighlights(
+        startNote,
+        ''
+    );
+
+}
+
+
+function evaluateSubmittedChallengeAnswer(
+    guessedNote
+) {
+
+    const banner =
+        document.getElementById(
+            'challenge-alert-banner'
+        );
+
+    banner.classList.remove(
+        'hidden',
+        'bg-emerald-500/10',
+        'text-emerald-400',
+        'border-emerald-500/20',
+        'bg-rose-500/10',
+        'text-rose-400',
+        'border-rose-500/20'
+    );
+
+    if (
+        guessedNote ===
+        activeChallengeTargetNote
+    ) {
+
+        studentPointsScore++;
+
+        studentStreakCount++;
+
+        answersSinceLastBonus++;
+
+        if (
+            studentStreakCount >
+            bestStreakRecord
+        ) {
+
+            bestStreakRecord =
+                studentStreakCount;
+
+        }
+
+        studentGameLevel =
+            Math.floor(
+                studentPointsScore / 5
+            ) + 1;
+
+        banner.classList.add(
+            'bg-emerald-500/10',
+            'text-emerald-400',
+            'border-emerald-500/20'
+        );
+
+        banner.innerText =
+            '✓ CORRECT! +1 POINT';
+
+        logToSystemConsole(
+            `[CORRECT] ${guessedNote}`
+        );
+
+        refreshGlobalScoreboardCounters();
+
+        if (
+            answersSinceLastBonus >= 10 &&
+            unlockedScaleDegreesCount < 8
+        ) {
+
+            setTimeout(
+                triggerScaleBonusModalOverlay,
+                400
+            );
+
+        } else {
+
+            setTimeout(
+                refreshChallengeObjectivePrompt,
+                700
+            );
+
+        }
+
+    } else {
+
+        studentStreakCount = 0;
+
+        banner.classList.add(
+            'bg-rose-500/10',
+            'text-rose-400',
+            'border-rose-500/20'
+        );
+
+        banner.innerText =
+            `✕ Not quite — try again.`;
+
+        logToSystemConsole(
+            `[INCORRECT] Selected ${guessedNote}; target was ${activeChallengeTargetNote}.`
+        );
+
+        refreshGlobalScoreboardCounters();
+
+    }
+
+}
+
+
+/* SCOREBOARD */
+
+function refreshGlobalScoreboardCounters() {
+
+    document.getElementById(
+        'global-score'
+    ).innerHTML =
+        `${studentPointsScore} <span class="text-xs font-normal text-slate-500">pts</span>`;
+
+    document.getElementById(
+        'global-level'
+    ).innerText =
+        studentGameLevel;
+
+    document.getElementById(
+        'global-streak'
+    ).innerText =
+        `${studentStreakCount} 🔥`;
+
+    document.getElementById(
+        'challenge-best-streak'
+    ).innerText =
+        bestStreakRecord;
+
+    document.getElementById(
+        'bonus-countdown'
+    ).innerText =
+        `${answersSinceLastBonus} / 10 Answers`;
+
+    document.getElementById(
+        'telemetry-accuracy'
+    ).innerText =
+        studentPointsScore > 0
+            ? `${Math.min(100, Math.round((studentPointsScore / Math.max(1, studentPointsScore + 1)) * 100))}%`
+            : '100%';
+
+    document.getElementById(
+        'teacher-score-display'
+    ).innerText =
+        studentPointsScore;
+
+    document.getElementById(
+        'teacher-streak-display'
+    ).innerText =
+        bestStreakRecord;
+
+}
+
+
+/* SCALE BOOK */
+
+function renderScaleBookVisualGrid() {
+
+    const grid =
+        document.getElementById(
+            'scale-notes-grid'
+        );
+
+    grid.innerHTML = '';
+
+    totalCmajorScaleNotes.forEach(
+        (note, index) => {
+
+            const cell =
+                document.createElement('div');
+
+            const unlocked =
+                index <
+                unlockedScaleDegreesCount;
+
+            if (unlocked) {
+
+                cell.className =
+                    'bg-indigo-950/80 border border-indigo-500/40 rounded-xl p-3 text-center shadow-md';
+
+                cell.innerHTML = `
+                    <span class="text-[9px] uppercase font-mono block text-indigo-400">
+                        Degree ${index + 1}
+                    </span>
+
+                    <span class="text-base font-black text-white font-mono">
+                        ${note}
+                    </span>
+
+                    <span class="text-[9px] text-emerald-400 font-medium block mt-1">
+                        ✓ Active
+                    </span>
+                `;
+
+            } else {
+
+                cell.className =
+                    'bg-slate-950/40 border border-slate-800 rounded-xl p-3 text-center opacity-40 border-dashed';
+
+                cell.innerHTML = `
+                    <span class="text-[9px] uppercase font-mono block text-slate-600">
+                        Degree ${index + 1}
+                    </span>
+
+                    <span class="text-base font-black text-slate-500 font-mono">
+                        ?
+                    </span>
+
+                    <span class="text-[9px] text-slate-500 block mt-1">
+                        Locked
+                    </span>
+                `;
+
+            }
+
+            grid.appendChild(cell);
+
+        }
+    );
+
+    document.getElementById(
+        'scalebook-completion-status'
+    ).innerText =
+        `${unlockedScaleDegreesCount} / 8 Notes Unlocked`;
+
+    const banner =
+        document.getElementById(
+            'scale-complete-banner'
+        );
+
+    if (unlockedScaleDegreesCount >= 8) {
+
+        banner.classList.remove(
+            'hidden'
+        );
+
+    } else {
+
+        banner.classList.add(
+            'hidden'
+        );
+
+    }
+
+}
+
+
+/* BONUS */
+
+function triggerScaleBonusModalOverlay() {
+
+    isBonusModalActive = true;
+
+    const modal =
+        document.getElementById(
+            'bonus-modal-overlay'
+        );
+
+    const choices =
+        document.getElementById(
+            'bonus-choices-box'
+        );
+
+    const feedback =
+        document.getElementById(
+            'bonus-modal-feedback'
+        );
+
+    const answer =
+        totalCmajorScaleNotes[
+            unlockedScaleDegreesCount
+        ].replace('2', '');
+
+    document.getElementById(
+        'bonus-question-text'
+    ).innerText =
+        `What is the next note in the C Major scale after ${totalCmajorScaleNotes[unlockedScaleDegreesCount - 1]}?`;
+
+    choices.innerHTML = '';
+
+    const options = [
+        answer,
+        'F#',
+        'Bb',
+        'C#'
+    ].sort(
+        () => Math.random() - 0.5
+    );
+
+    options.forEach(option => {
+
+        const button =
+            document.createElement('button');
+
+        button.className =
+            'bg-slate-950 hover:bg-indigo-950 border border-slate-800 hover:border-indigo-500 text-slate-200 py-2.5 rounded-lg text-sm font-mono font-bold transition-all';
+
+        button.innerText =
+            option;
+
+        button.onclick = () =>
+            processMilestoneBonusAnswerAction(
+                option,
+                answer
+            );
+
+        choices.appendChild(button);
+
+    });
+
+    feedback.classList.add(
+        'hidden'
+    );
+
+    modal.classList.remove(
+        'hidden'
+    );
+
+}
+
+
+function processMilestoneBonusAnswerAction(
+    selected,
+    answer
+) {
+
+    const feedback =
+        document.getElementById(
+            'bonus-modal-feedback'
+        );
+
+    feedback.classList.remove(
+        'hidden',
+        'bg-emerald-500/20',
+        'text-emerald-400',
+        'bg-rose-500/20',
+        'text-rose-400'
+    );
+
+    if (selected === answer) {
+
+        unlockedScaleDegreesCount++;
+
+        answersSinceLastBonus = 0;
+
+        feedback.classList.add(
+            'bg-emerald-500/20',
+            'text-emerald-400'
+        );
+
+        feedback.innerText =
+            '✓ Correct! New scale degree unlocked!';
+
+        renderScaleBookVisualGrid();
+
+        refreshGlobalScoreboardCounters();
+
+        logToSystemConsole(
+            `[SCALE] Degree ${unlockedScaleDegreesCount} unlocked.`
+        );
+
+        setTimeout(() => {
+
+            document.getElementById(
+                'bonus-modal-overlay'
+            ).classList.add('hidden');
+
+            isBonusModalActive = false;
+
+            if (challengeSessionActive) {
+
+                refreshChallengeObjectivePrompt();
+
+            }
+
+        }, 1200);
+
+    } else {
+
+        feedback.classList.add(
+            'bg-rose-500/20',
+            'text-rose-400'
+        );
+
+        feedback.innerText =
+            '✕ Not quite. Try again.';
+
+    }
+
+}
+
+
+/* TEACHER */
+
+function toggleTeacherChromaticSetting() {
+
+    const checkbox =
+        document.getElementById(
+            'teacher-lock-chromatic'
+        );
+
+    teacherUnlockedChromaticMode =
+        checkbox.checked;
+
+    logToSystemConsole(
+        `[TEACHER] Chromatic mode: ${teacherUnlockedChromaticMode ? 'ON' : 'OFF'}`
+    );
+
+}
+
+
+function updateTeacherRangeConstraint() {
+
+    teacherKeyboardRangeRestriction =
+        document.getElementById(
+            'teacher-range-select'
+        ).value;
+
+    logToSystemConsole(
+        `[TEACHER] Keyboard range set to ${teacherKeyboardRangeRestriction}.`
+    );
+
+}
+
+
+/* LOGS */
+
+function logToSystemConsole(message) {
+
+    const box =
+        document.getElementById(
+            'system-terminal-logs'
+        );
+
+    if (!box) return;
+
+    const timestamp =
+        new Date().toLocaleTimeString(
+            [],
+            {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }
+        );
+
+    const line =
+        document.createElement('div');
+
+    line.className =
+        'py-0.5';
+
+    line.innerHTML =
+        `<span class="text-slate-600">[${timestamp}]</span> ${message}`;
+
+    box.appendChild(line);
+
+    box.scrollTop =
+        box.scrollHeight;
+
+}
+
+
+function clearSystemTerminalLogs() {
+
+    document.getElementById(
+        'system-terminal-logs'
+    ).innerHTML =
+        '<div class="text-indigo-400/80">[SYSTEM RESET] Activity feed cleared.</div>';
+
+}
+
+</script>
+
+</body>
+</html>
