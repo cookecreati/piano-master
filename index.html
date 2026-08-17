@@ -70,6 +70,14 @@
     align-items: center;
     justify-content: center;
 }
+        .challenge-finger-reference {
+    background: #f59e0b;
+    border-color: #fbbf24;
+    box-shadow:
+        0 0 0 4px rgba(245, 158, 11, 0.25),
+        0 0 18px rgba(245, 158, 11, 0.65);
+    transform: translateY(-4px);
+}
 
 .finger-choice:hover {
     background: #818cf8;
@@ -558,9 +566,15 @@
                 class="challenge-piano-wrapper hidden">
 
                 <div
-                    class="challenge-piano-frame"
-                    id="challenge-piano-frame">
-                </div>
+    id="challenge-piano-direction"
+    class="text-4xl font-black text-amber-400 font-mono my-2">
+    →
+</div>
+
+<div
+    class="challenge-piano-frame"
+    id="challenge-piano-frame">
+</div>
 
                 <p class="text-[11px] text-slate-400 mt-3">
                     Calculate the destination note and click it on the piano.
@@ -582,40 +596,51 @@
                     <div class="finger-palm"></div>
 
                     <button
-                        class="finger-choice finger-1"
+                        class="finger-choice challenge-finger-key finger-1"
+                        data-finger="1"
                         onclick="submitFingerAnswer(1)">
                         1
                     </button>
 
                     <button
-                        class="finger-choice finger-2"
+                        class="finger-choice challenge-finger-key finger-2"
+                        data-finger="2"
                         onclick="submitFingerAnswer(2)">
                         2
                     </button>
 
                     <button
-                        class="finger-choice finger-3"
+                        class="finger-choice challenge-finger-key finger-3"
+                        data-finger="3"
                         onclick="submitFingerAnswer(3)">
                         3
                     </button>
 
                     <button
-                        class="finger-choice finger-4"
+                        class="finger-choice challenge-finger-key finger-4"
+                        data-finger="4"
                         onclick="submitFingerAnswer(4)">
                         4
                     </button>
 
                     <button
-                        class="finger-choice finger-5"
+                        class="finger-choice challenge-finger-key finger-5"
+                        data-finger="5"
                         onclick="submitFingerAnswer(5)">
                         5
                     </button>
 
                     <div
-                        id="challenge-finger-hand-label"
-                        class="finger-hand-label">
-                        R
-                    </div>
+    id="challenge-finger-hand-label"
+    class="finger-hand-label">
+    R
+</div>
+
+<div
+    id="challenge-finger-direction"
+    class="finger-direction">
+    →
+</div>
 
                 </div>
 
@@ -811,6 +836,7 @@
 </section>
 
 <!-- HOW TO -->
+<!-- HOW TO -->
 <section id="view-howto" class="view-section hidden flex flex-col gap-6">
 
     <div class="bg-slate-950/40 border border-slate-800 rounded-2xl p-6 shadow-md">
@@ -822,7 +848,7 @@
             </h2>
 
             <p class="text-xs text-slate-400 mt-1">
-                Learn what each part of Piano Master means and how it helps you practice.
+                Learn how to use the piano, your hands, and the clues in each challenge.
             </p>
 
         </div>
@@ -833,37 +859,82 @@
             <div class="help-card">
                 <h3>Total Score</h3>
                 <p>
-                    Your total score shows how many successful challenge answers you have earned.
+                    Your total score counts the successful challenge answers you earn while practicing.
                 </p>
             </div>
+
 
             <div class="help-card">
                 <h3>Game Level</h3>
                 <p>
-                    Your game level grows as you earn points. This measures your game progress, not your official curriculum level.
+                    Your game level grows as you earn points. This shows your game progress and is separate from your musical curriculum level.
                 </p>
             </div>
+
 
             <div class="help-card">
                 <h3>Streak</h3>
                 <p>
-                    Your streak counts consecutive correct answers. Keep going to build your best streak.
+                    Your streak counts consecutive correct answers. Keep going to build your best streak!
                 </p>
             </div>
+
 
             <div class="help-card">
                 <h3>Practice Mode</h3>
                 <p>
-                    Practice Mode lets you explore notes, directions, hands and finger positions without pressure from a timer.
+                    Practice Mode lets you explore notes, hands, fingers, and movement without a timer. Use the arrows and piano highlights to see how the musical relationship works.
                 </p>
             </div>
+
 
             <div class="help-card">
                 <h3>Challenge Mode</h3>
                 <p>
-                    Challenge Mode gives you questions to solve. Some questions use the piano and some use finger positions.
+                    Challenge Mode gives you musical questions to solve. Some questions ask you to find a note on the piano, while others ask you to identify a finger.
                 </p>
             </div>
+
+
+            <div class="help-card">
+                <h3>✋ Look At The Hand</h3>
+                <p>
+                    Always check whether the question shows your Right Hand or Left Hand. Finger numbers work in opposite directions between the two hands.
+                </p>
+            </div>
+
+
+            <div class="help-card">
+                <h3>🎹 Find The Starting Point</h3>
+                <p>
+                    Find the starting finger or starting note shown in the question. Your starting position can change as you progress through the curriculum.
+                </p>
+            </div>
+
+
+            <div class="help-card">
+                <h3>⬆️ Follow The Direction</h3>
+                <p>
+                    Use the arrow or direction clue to know which way to move from your starting position.
+                </p>
+            </div>
+
+
+            <div class="help-card">
+                <h3>🎯 Find Your Destination</h3>
+                <p>
+                    Put all the clues together: hand, finger, starting note, and direction. Then choose the note or finger where you should land.
+                </p>
+            </div>
+
+
+            <div class="help-card">
+                <h3>📈 Unlock More As You Learn</h3>
+                <p>
+                    As you progress, more notes, positions, and musical material can become available. Your teacher controls curriculum progression so you can learn at the right pace.
+                </p>
+            </div>
+
 
             <div class="help-card">
                 <h3>Scale Progress Book</h3>
@@ -872,31 +943,35 @@
                 </p>
             </div>
 
-            <div class="help-card">
-                <h3>Application Activity</h3>
-                <p>
-                    Application Activity shows what is happening during your session, including answers, progress and system events.
-                </p>
-            </div>
 
             <div class="help-card">
                 <h3>Interactive Piano</h3>
                 <p>
-                    When a challenge asks for a note, tap the piano key you believe is the answer.
+                    When a challenge asks for a note, use the clues to figure out the answer and tap that piano key. The piano will play the note you select.
                 </p>
             </div>
+
 
             <div class="help-card">
                 <h3>Finger Questions</h3>
                 <p>
-                    When you see a hand, tap the actual finger you believe answers the question.
+                    When a challenge asks for a finger, look at the hand shown and use the starting position and direction to determine the correct finger.
                 </p>
             </div>
+
+
+            <div class="help-card">
+                <h3>Application Activity</h3>
+                <p>
+                    The activity panel shows what is happening during your session, including answers, progress, and system events.
+                </p>
+            </div>
+
 
             <div class="help-card">
                 <h3>Achievements</h3>
                 <p>
-                    Achievements recognize milestones as you continue learning and practicing.
+                    Achievements recognize milestones as you continue practicing and successfully completing challenges.
                 </p>
             </div>
 
@@ -1293,6 +1368,7 @@ let challengeTimerIntervalId = null;
 let activeChallengeTargetNote = '';
 
 let unlockedScaleDegreesCount = 5;
+let unlockedKeyboardRange = 5;
 
 const totalCmajorScaleNotes = [
     'C',
@@ -2276,13 +2352,18 @@ function createPianoChallengeQuestion() {
         'challenge-finger-question'
     ).classList.add('hidden');
 
-    let pool = [
-        'C',
-        'D',
-        'E',
-        'F',
-        'G'
-    ];
+
+    /*
+     * BUILD THE CURRENT NOTE POOL
+     *
+     * Early progression uses only the notes
+     * the student has unlocked.
+     *
+     * Teacher chromatic mode can expose
+     * the full keyboard.
+     */
+
+    let pool = [];
 
     if (teacherUnlockedChromaticMode) {
 
@@ -2304,7 +2385,7 @@ function createPianoChallengeQuestion() {
     } else {
 
         for (
-            let i = 5;
+            let i = 0;
             i < unlockedScaleDegreesCount;
             i++
         ) {
@@ -2324,6 +2405,48 @@ function createPianoChallengeQuestion() {
 
     }
 
+
+    /*
+     * Safety fallback.
+     */
+
+    if (pool.length === 0) {
+
+        pool = [
+            'C',
+            'D',
+            'E',
+            'F',
+            'G'
+        ];
+
+    }
+
+
+    /*
+     * RANDOM HAND
+     */
+
+    activeChallengeHand =
+        Math.random() > 0.5
+            ? 'RH'
+            : 'LH';
+
+
+    /*
+     * RANDOM STARTING FINGER
+     */
+
+    activeChallengeStartFinger =
+        Math.floor(
+            Math.random() * 5
+        ) + 1;
+
+
+    /*
+     * RANDOM STARTING NOTE
+     */
+
     activeChallengeStartNote =
         pool[
             Math.floor(
@@ -2331,16 +2454,90 @@ function createPianoChallengeQuestion() {
             )
         ];
 
+
+    /*
+     * RANDOM DIRECTION
+     */
+
     activeChallengeOperator =
         Math.random() > 0.5
             ? '+'
             : '-';
 
-    activeChallengeSteps =
-        Math.floor(
-            Math.random() * 2
-        ) + 1;
 
+    /*
+     * DETERMINE HOW MANY FINGER STEPS
+     * ARE AVAILABLE FROM THE STARTING FINGER.
+     *
+     * RH:
+     *   + moves toward higher finger numbers.
+     *   - moves toward lower finger numbers.
+     *
+     * LH:
+     *   + moves toward lower finger numbers.
+     *   - moves toward higher finger numbers.
+     */
+
+    let maximumFingerSteps;
+
+    if (
+        activeChallengeHand === 'RH'
+    ) {
+
+        maximumFingerSteps =
+            activeChallengeOperator === '+'
+                ? 5 - activeChallengeStartFinger
+                : activeChallengeStartFinger - 1;
+
+    } else {
+
+        maximumFingerSteps =
+            activeChallengeOperator === '+'
+                ? activeChallengeStartFinger - 1
+                : 5 - activeChallengeStartFinger;
+
+    }
+
+
+    /*
+     * If the selected direction cannot move
+     * at least one finger, reverse the direction.
+     */
+
+    if (
+        maximumFingerSteps < 1
+    ) {
+
+        activeChallengeOperator =
+            activeChallengeOperator === '+'
+                ? '-'
+                : '+';
+
+        if (
+            activeChallengeHand === 'RH'
+        ) {
+
+            maximumFingerSteps =
+                activeChallengeOperator === '+'
+                    ? 5 - activeChallengeStartFinger
+                    : activeChallengeStartFinger - 1;
+
+        } else {
+
+            maximumFingerSteps =
+                activeChallengeOperator === '+'
+                    ? activeChallengeStartFinger - 1
+                    : 5 - activeChallengeStartFinger;
+
+        }
+
+    }
+
+
+    /*
+     * Determine how far the student can move
+     * within the currently unlocked note range.
+     */
 
     const cleanStart =
         activeChallengeStartNote.replace('#', '');
@@ -2350,204 +2547,72 @@ function createPianoChallengeQuestion() {
             cleanStart
         );
 
-    let targetIndex;
+
+    let maximumNoteSteps;
 
     if (
         activeChallengeOperator === '+'
     ) {
 
-        targetIndex =
-            startIndex +
-            activeChallengeSteps;
+        maximumNoteSteps =
+            6 - startIndex;
 
     } else {
 
-        targetIndex =
-            startIndex -
-            activeChallengeSteps;
+        maximumNoteSteps =
+            startIndex;
 
     }
 
 
-    targetIndex =
-        Math.max(
-            0,
-            Math.min(
-                6,
-                targetIndex
-            )
+    /*
+     * The question must be valid in BOTH:
+     *
+     * 1. Finger space
+     * 2. Available note space
+     */
+
+    const maximumValidSteps =
+        Math.min(
+            maximumFingerSteps,
+            maximumNoteSteps
         );
 
-    activeChallengeTargetNote =
-        ALPHABET_NATURAL_NOTES[
-            targetIndex
-        ];
+
+    /*
+     * If this particular combination cannot
+     * produce a valid movement, generate another
+     * question instead.
+     */
+
+    if (
+        maximumValidSteps < 1
+    ) {
+
+        createPianoChallengeQuestion();
+
+        return;
+
+    }
 
 
-    document.getElementById(
-        'challenge-prompt-text'
-    ).innerText =
-        `${activeChallengeStartNote} ${activeChallengeOperator} ${activeChallengeSteps} = ?`;
-
-    document.getElementById(
-        'challenge-prompt-subtext'
-    ).innerText =
-        'Calculate the destination note and click it on the piano.';
-
-
-    renderChallengePiano();
-
-    applyVisualKeyHighlights(
-        activeChallengeStartNote,
-        ''
-    );
-
-}
-
-
-function renderChallengePiano() {
-
-    const container =
-        document.getElementById(
-            'challenge-piano-frame'
-        );
-
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    const visibleNotes = [
-        'C',
-        'C#',
-        'D',
-        'D#',
-        'E',
-        'F',
-        'F#',
-        'G',
-        'G#',
-        'A',
-        'A#',
-        'B'
-    ];
-
-    const whiteNotes =
-        visibleNotes.filter(
-            note => !note.includes('#')
-        );
-
-    let whiteIndex = 0;
-
-    visibleNotes.forEach(note => {
-
-        const button =
-            document.createElement('button');
-
-        button.dataset.challengeNote =
-            note;
-
-        if (!note.includes('#')) {
-
-            button.className =
-                'piano-key white-key challenge-piano-key bg-white border border-slate-200 rounded-b-md flex flex-col justify-end pb-2 items-center text-slate-800 font-mono text-[9px] font-bold absolute z-10';
-
-            button.style.width =
-                `${100 / whiteNotes.length}%`;
-
-            button.style.height =
-                '100%';
-
-            button.style.left =
-                `${whiteIndex * (100 / whiteNotes.length)}%`;
-
-            button.innerText =
-                note;
-
-            whiteIndex++;
-
-        } else {
-
-            button.className =
-                'piano-key black-key challenge-piano-key bg-slate-950 border border-slate-900 rounded-b-sm absolute z-20 flex flex-col justify-end pb-1 items-center text-slate-400 font-mono text-[7px]';
-
-            const blackWidth =
-                (100 / whiteNotes.length) * 0.62;
-
-            button.style.width =
-                `${blackWidth}%`;
-
-            button.style.height =
-                '62%';
-
-            const positions = {
-                'C#': 0.68,
-                'D#': 1.68,
-                'F#': 3.68,
-                'G#': 4.68,
-                'A#': 5.68
-            };
-
-            button.style.left =
-                `${(positions[note] / whiteNotes.length) * 100}%`;
-
-            button.innerText =
-                note;
-        }
-
-        button.onclick = () => {
-
-            triggerOrganicAudioTone(note);
-
-            evaluateSubmittedChallengeAnswer(
-                note
-            );
-
-        };
-
-        container.appendChild(button);
-
-    });
-
-}
-
-
-function createFingerChallengeQuestion() {
-
-    activeChallengeQuestionType =
-        'finger';
-
-    document.getElementById(
-        'challenge-piano-question'
-    ).classList.add('hidden');
-
-    document.getElementById(
-        'challenge-finger-question'
-    ).classList.remove('hidden');
-
-
-    activeChallengeHand =
-        Math.random() > 0.5
-            ? 'RH'
-            : 'LH';
-
-
-    activeChallengeStartFinger =
-        Math.floor(
-            Math.random() * 5
-        ) + 1;
-
+    /*
+     * Early challenges use one or two steps
+     * whenever possible.
+     */
 
     activeChallengeSteps =
-        Math.floor(
-            Math.random() * 2
-        ) + 1;
+        Math.min(
+            maximumValidSteps,
+            Math.floor(
+                Math.random() * 2
+            ) + 1
+        );
 
 
-    activeChallengeOperator =
-        Math.random() > 0.5
-            ? '+'
-            : '-';
-
+    /*
+     * CALCULATE THE DESTINATION FINGER
+     */
 
     if (
         activeChallengeHand === 'RH'
@@ -2574,21 +2639,755 @@ function createFingerChallengeQuestion() {
     }
 
 
+    /*
+     * CALCULATE THE DESTINATION NOTE
+     */
+
+    let targetIndex;
+
     if (
-        activeChallengeTargetFinger < 1 ||
-        activeChallengeTargetFinger > 5
+        activeChallengeOperator === '+'
     ) {
 
-        createFingerChallengeQuestion();
-        return;
+        targetIndex =
+            startIndex +
+            activeChallengeSteps;
+
+    } else {
+
+        targetIndex =
+            startIndex -
+            activeChallengeSteps;
 
     }
 
 
+    activeChallengeTargetNote =
+        ALPHABET_NATURAL_NOTES[
+            targetIndex
+        ];
+
+
+    /*
+     * DISPLAY HAND CONTEXT
+     */
+
     const handLabel =
         activeChallengeHand === 'RH'
-            ? 'R'
-            : 'L';
+            ? 'RH'
+            : 'LH';
+
+
+    /*
+     * DISPLAY DIRECTIONAL LANGUAGE
+     *
+     * The student is not shown raw arithmetic.
+     */
+
+    const directionElement =
+    document.getElementById(
+        'challenge-piano-direction'
+    );
+
+if (directionElement) {
+
+    directionElement.innerText =
+        activeChallengeTargetFinger >
+        activeChallengeStartFinger
+            ? (
+                activeChallengeHand === 'RH'
+                    ? '→'
+                    : '←'
+            )
+            : (
+                activeChallengeHand === 'RH'
+                    ? '←'
+                    : '→'
+            );
+
+}
+
+
+document.getElementById(
+    'challenge-prompt-text'
+).innerText =
+    `If my ${handLabel} Finger ${activeChallengeStartFinger} is on ${activeChallengeStartNote}, which note is my Finger ${activeChallengeTargetFinger}?`;
+
+
+document.getElementById(
+    'challenge-prompt-subtext'
+).innerText =
+    `Use the ${activeChallengeHand === 'RH' ? 'right' : 'left'} hand position and the arrow to find the destination note.`;
+
+    /*
+     * Render the challenge keyboard.
+     */
+
+    renderChallengePiano();
+
+
+    /*
+     * Highlight the starting/reference note.
+     */
+
+    applyVisualKeyHighlights(
+        activeChallengeStartNote,
+        ''
+    );
+
+}
+
+function renderChallengePiano() {
+
+    const container =
+        document.getElementById(
+            'challenge-piano-frame'
+        );
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+
+    /*
+     * Build the visible keyboard from the
+     * student's current progression.
+     *
+     * Early game:
+     * Only unlocked natural notes appear.
+     *
+     * Teacher chromatic mode:
+     * Full chromatic keyboard appears.
+     */
+
+    let visibleNotes = [];
+
+    if (teacherUnlockedChromaticMode) {
+
+        visibleNotes = [
+            'C',
+            'C#',
+            'D',
+            'D#',
+            'E',
+            'F',
+            'F#',
+            'G',
+            'G#',
+            'A',
+            'A#',
+            'B'
+        ];
+
+    } else {
+
+        for (
+            let i = 0;
+            i < unlockedScaleDegreesCount;
+            i++
+        ) {
+
+            const note =
+                totalCmajorScaleNotes[i];
+
+            if (note) {
+
+                visibleNotes.push(
+                    note.replace('2', '')
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Safety fallback.
+     */
+
+    if (!visibleNotes.length) {
+
+        visibleNotes = [
+            'C',
+            'D',
+            'E',
+            'F',
+            'G'
+        ];
+
+    }
+
+
+    const whiteNotes =
+        visibleNotes.filter(
+            note => !note.includes('#')
+        );
+
+
+    let whiteIndex = 0;
+
+
+    visibleNotes.forEach(note => {
+
+        const button =
+            document.createElement('button');
+
+
+        button.dataset.challengeNote =
+            note;
+
+
+        /*
+         * WHITE KEYS
+         */
+
+        if (!note.includes('#')) {
+
+            button.className =
+                'piano-key white-key challenge-piano-key bg-white border border-slate-200 rounded-b-md flex flex-col justify-end pb-2 items-center text-slate-800 font-mono text-[9px] font-bold absolute z-10';
+
+
+            button.style.width =
+                `${100 / whiteNotes.length}%`;
+
+
+            button.style.height =
+                '100%';
+
+
+            button.style.left =
+                `${whiteIndex * (100 / whiteNotes.length)}%`;
+
+
+            button.innerText =
+                note;
+
+
+            whiteIndex++;
+
+
+        /*
+         * BLACK KEYS
+         */
+
+        } else {
+
+            button.className =
+                'piano-key black-key challenge-piano-key bg-slate-950 border border-slate-900 rounded-b-sm absolute z-20 flex flex-col justify-end pb-1 items-center text-slate-400 font-mono text-[7px]';
+
+
+            const blackWidth =
+                (100 / whiteNotes.length) * 0.62;
+
+
+            button.style.width =
+                `${blackWidth}%`;
+
+
+            button.style.height =
+                '62%';
+
+
+            const positions = {
+
+                'C#': 0.68,
+                'D#': 1.68,
+                'F#': 3.68,
+                'G#': 4.68,
+                'A#': 5.68
+
+            };
+
+
+            /*
+             * Only position a black key if its
+             * reference white-key position exists.
+             */
+
+            if (
+                positions[note] !== undefined
+            ) {
+
+                button.style.left =
+                    `${(
+                        positions[note] /
+                        whiteNotes.length
+                    ) * 100}%`;
+
+            }
+
+
+            button.innerText =
+                note;
+
+        }
+
+
+        /*
+         * ANSWER INTERACTION
+         */
+
+        button.onclick = () => {
+
+            triggerOrganicAudioTone(
+                note
+            );
+
+            evaluateSubmittedChallengeAnswer(
+                note
+            );
+
+        };
+
+
+        container.appendChild(
+            button
+        );
+
+    });
+
+}function renderChallengePiano() {
+
+    const container =
+        document.getElementById(
+            'challenge-piano-frame'
+        );
+
+    if (!container) return;
+
+    container.innerHTML = '';
+
+
+    /*
+     * Build the visible keyboard from the
+     * student's current progression.
+     *
+     * Early game:
+     * Only unlocked natural notes appear.
+     *
+     * Teacher chromatic mode:
+     * Full chromatic keyboard appears.
+     */
+
+    let visibleNotes = [];
+
+    if (teacherUnlockedChromaticMode) {
+
+        visibleNotes = [
+            'C',
+            'C#',
+            'D',
+            'D#',
+            'E',
+            'F',
+            'F#',
+            'G',
+            'G#',
+            'A',
+            'A#',
+            'B'
+        ];
+
+    } else {
+
+        for (
+            let i = 0;
+            i < unlockedScaleDegreesCount;
+            i++
+        ) {
+
+            const note =
+                totalCmajorScaleNotes[i];
+
+            if (note) {
+
+                visibleNotes.push(
+                    note.replace('2', '')
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Safety fallback.
+     */
+
+    if (!visibleNotes.length) {
+
+        visibleNotes = [
+            'C',
+            'D',
+            'E',
+            'F',
+            'G'
+        ];
+
+    }
+
+
+    const whiteNotes =
+        visibleNotes.filter(
+            note => !note.includes('#')
+        );
+
+
+    let whiteIndex = 0;
+
+
+    visibleNotes.forEach(note => {
+
+        const button =
+            document.createElement('button');
+
+
+        button.dataset.challengeNote =
+            note;
+
+
+        /*
+         * WHITE KEYS
+         */
+
+        if (!note.includes('#')) {
+
+            button.className =
+                'piano-key white-key challenge-piano-key bg-white border border-slate-200 rounded-b-md flex flex-col justify-end pb-2 items-center text-slate-800 font-mono text-[9px] font-bold absolute z-10';
+
+
+            button.style.width =
+                `${100 / whiteNotes.length}%`;
+
+
+            button.style.height =
+                '100%';
+
+
+            button.style.left =
+                `${whiteIndex * (100 / whiteNotes.length)}%`;
+
+
+            button.innerText =
+                note;
+
+
+            whiteIndex++;
+
+
+        /*
+         * BLACK KEYS
+         */
+
+        } else {
+
+            button.className =
+                'piano-key black-key challenge-piano-key bg-slate-950 border border-slate-900 rounded-b-sm absolute z-20 flex flex-col justify-end pb-1 items-center text-slate-400 font-mono text-[7px]';
+
+
+            const blackWidth =
+                (100 / whiteNotes.length) * 0.62;
+
+
+            button.style.width =
+                `${blackWidth}%`;
+
+
+            button.style.height =
+                '62%';
+
+
+            const positions = {
+
+                'C#': 0.68,
+                'D#': 1.68,
+                'F#': 3.68,
+                'G#': 4.68,
+                'A#': 5.68
+
+            };
+
+
+            /*
+             * Only position a black key if its
+             * reference white-key position exists.
+             */
+
+            if (
+                positions[note] !== undefined
+            ) {
+
+                button.style.left =
+                    `${(
+                        positions[note] /
+                        whiteNotes.length
+                    ) * 100}%`;
+
+            }
+
+
+            button.innerText =
+                note;
+
+        }
+
+
+        /*
+         * ANSWER INTERACTION
+         */
+
+        button.onclick = () => {
+
+            triggerOrganicAudioTone(
+                note
+            );
+
+            evaluateSubmittedChallengeAnswer(
+                note
+            );
+
+        };
+
+
+        container.appendChild(
+            button
+        );
+
+    });
+
+}
+
+function getChallengeTargetFinger(
+    hand,
+    startFinger,
+    operator,
+    steps
+) {
+
+    if (hand === 'RH') {
+
+        return (
+            startFinger +
+            (
+                operator === '+'
+                    ? steps
+                    : -steps
+            )
+        );
+
+    } else {
+
+        return (
+            startFinger -
+            (
+                operator === '+'
+                    ? steps
+                    : -steps
+            )
+        );
+
+    }
+
+}
+
+    
+function createFingerChallengeQuestion() {
+
+    activeChallengeQuestionType =
+        'finger';
+
+    document.getElementById(
+        'challenge-piano-question'
+    ).classList.add('hidden');
+
+    document.getElementById(
+        'challenge-finger-question'
+    ).classList.remove('hidden');
+
+
+    /*
+     * RANDOM HAND
+     */
+
+    activeChallengeHand =
+        Math.random() > 0.5
+            ? 'RH'
+            : 'LH';
+
+
+    /*
+     * RANDOM STARTING FINGER
+     *
+     * Any of the five fingers may be used.
+     */
+
+    activeChallengeStartFinger =
+        Math.floor(
+            Math.random() * 5
+        ) + 1;
+
+
+    /*
+     * RANDOM DIRECTION
+     */
+
+    activeChallengeOperator =
+        Math.random() > 0.5
+            ? '+'
+            : '-';
+
+
+    /*
+     * Determine how many finger positions
+     * are available in the selected direction.
+     */
+
+    let maximumFingerSteps;
+
+    if (
+        activeChallengeHand === 'RH'
+    ) {
+
+        maximumFingerSteps =
+            activeChallengeOperator === '+'
+                ? 5 - activeChallengeStartFinger
+                : activeChallengeStartFinger - 1;
+
+    } else {
+
+        maximumFingerSteps =
+            activeChallengeOperator === '+'
+                ? activeChallengeStartFinger - 1
+                : 5 - activeChallengeStartFinger;
+
+    }
+
+
+    /*
+     * If the selected direction cannot move,
+     * reverse it.
+     */
+
+    if (
+        maximumFingerSteps < 1
+    ) {
+
+        activeChallengeOperator =
+            activeChallengeOperator === '+'
+                ? '-'
+                : '+';
+
+
+        if (
+            activeChallengeHand === 'RH'
+        ) {
+
+            maximumFingerSteps =
+                activeChallengeOperator === '+'
+                    ? 5 - activeChallengeStartFinger
+                    : activeChallengeStartFinger - 1;
+
+        } else {
+
+            maximumFingerSteps =
+                activeChallengeOperator === '+'
+                    ? activeChallengeStartFinger - 1
+                    : 5 - activeChallengeStartFinger;
+
+        }
+
+    }
+
+
+    /*
+     * Choose one or two finger positions
+     * whenever possible.
+     */
+
+    activeChallengeSteps =
+        Math.min(
+            maximumFingerSteps,
+            Math.floor(
+                Math.random() * 2
+            ) + 1
+        );
+
+
+    /*
+     * Calculate the destination finger.
+     */
+
+    activeChallengeTargetFinger =
+        getChallengeTargetFinger(
+            activeChallengeHand,
+            activeChallengeStartFinger,
+            activeChallengeOperator,
+            activeChallengeSteps
+        );
+
+
+    /*
+     * Display the hand visual.
+     */
+
+  const handLabel =
+    activeChallengeHand === 'RH'
+        ? 'R'
+        : 'L';
+
+const directionElement =
+    document.getElementById(
+        'challenge-finger-direction'
+    );
+
+if (directionElement) {
+
+    directionElement.innerText =
+        activeChallengeTargetFinger >
+        activeChallengeStartFinger
+            ? (
+                activeChallengeHand === 'RH'
+                    ? '→'
+                    : '←'
+            )
+            : (
+                activeChallengeHand === 'RH'
+                    ? '←'
+                    : '→'
+            );
+
+}
+    document
+    .querySelectorAll(
+        '.challenge-finger-key'
+    )
+    .forEach(
+        finger => {
+
+            finger.classList.remove(
+                'challenge-finger-reference'
+            );
+
+        }
+    );
+
+const referenceFinger =
+    document.querySelector(
+        `.challenge-finger-key[data-finger="${activeChallengeStartFinger}"]`
+    );
+
+if (referenceFinger) {
+
+    referenceFinger.classList.add(
+        'challenge-finger-reference'
+    );
+
+}
+
 
     document.getElementById(
         'challenge-finger-hand-label'
@@ -2596,19 +3395,24 @@ function createFingerChallengeQuestion() {
         handLabel;
 
 
+    /*
+     * CONTEXTUAL QUESTION
+     *
+     * No raw addition/subtraction is shown.
+     */
+
     document.getElementById(
         'challenge-prompt-text'
     ).innerText =
-        `${activeChallengeStartFinger} ${activeChallengeOperator} ${activeChallengeSteps} = ?`;
+        `If my ${activeChallengeHand} Finger ${activeChallengeStartFinger} is my reference finger, which finger is ${activeChallengeSteps} position${activeChallengeSteps === 1 ? '' : 's'} away?`;
 
 
     document.getElementById(
         'challenge-prompt-subtext'
     ).innerText =
-        `${activeChallengeHand === 'RH' ? 'Right' : 'Left'} Hand. Tap the destination finger.`;
+        `Use the ${activeChallengeHand === 'RH' ? 'right' : 'left'} hand shown to find the destination finger.`;
 
 }
-
 
 function submitFingerAnswer(
     selectedFinger
