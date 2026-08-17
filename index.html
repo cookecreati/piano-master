@@ -53,6 +53,17 @@
     height: 175px;
     margin: 1rem auto;
 }
+.finger-hand-direction {
+    position: absolute;
+    left: 50%;
+    bottom: -28px;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    font-weight: 900;
+    color: #f59e0b;
+    line-height: 1;
+    pointer-events: none;
+}
 
 .finger-choice {
     position: absolute;
@@ -634,6 +645,11 @@
     id="challenge-finger-hand-label"
     class="finger-hand-label">
     R
+</div>
+<div
+    id="challenge-finger-direction"
+    class="finger-hand-direction">
+    ↑
 </div>
 
 <div
@@ -2750,58 +2766,25 @@ function renderChallengePiano() {
 
 
     /*
-     * Build the visible keyboard from the
-     * student's current progression.
-     *
-     * Early game:
-     * Only unlocked natural notes appear.
-     *
-     * Teacher chromatic mode:
-     * Full chromatic keyboard appears.
-     */
+ * Challenge Mode always shows the
+ * complete natural C–C scale.
+ *
+ * The student's progression still
+ * controls which notes are tested,
+ * but the visual always provides
+ * the full keyboard reference.
+ */
 
-    let visibleNotes = [];
-
-    if (teacherUnlockedChromaticMode) {
-
-        visibleNotes = [
-            'C',
-            'C#',
-            'D',
-            'D#',
-            'E',
-            'F',
-            'F#',
-            'G',
-            'G#',
-            'A',
-            'A#',
-            'B'
-        ];
-
-    } else {
-
-        for (
-            let i = 0;
-            i < unlockedScaleDegreesCount;
-            i++
-        ) {
-
-            const note =
-                totalCmajorScaleNotes[i];
-
-            if (note) {
-
-                visibleNotes.push(
-                    note.replace('2', '')
-                );
-
-            }
-
-        }
-
-    }
-
+    let visibleNotes = [
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'A',
+    'B',
+    'C'
+];
 
     /*
      * Safety fallback.
@@ -2990,29 +2973,29 @@ function renderChallengePiano() {
             'B'
         ];
 
-    } else {
+       } else {
 
-        for (
-            let i = 0;
-            i < unlockedScaleDegreesCount;
-            i++
-        ) {
+        /*
+         * Challenge Mode always shows the full
+         * C-major scale so students can see the
+         * complete musical geography.
+         *
+         * Progression still controls which notes
+         * can be used in generated questions.
+         */
 
-            const note =
-                totalCmajorScaleNotes[i];
-
-            if (note) {
-
-                visibleNotes.push(
-                    note.replace('2', '')
-                );
-
-            }
-
-        }
+        visibleNotes = [
+            'C',
+            'D',
+            'E',
+            'F',
+            'G',
+            'A',
+            'B',
+            'C'
+        ];
 
     }
-
 
     /*
      * Safety fallback.
@@ -3401,18 +3384,64 @@ if (referenceFinger) {
      * No raw addition/subtraction is shown.
      */
 
+        const handName =
+        activeChallengeHand === 'RH'
+            ? 'RIGHT HAND'
+            : 'LEFT HAND';
+
+
+    const directionIsUp =
+    activeChallengeHand === 'RH'
+        ? activeChallengeTargetFinger >
+          activeChallengeStartFinger
+        : activeChallengeTargetFinger <
+          activeChallengeStartFinger;
+       
+    const fingerDirectionElement =
+        document.getElementById(
+            'challenge-finger-direction'
+        );
+
+    if (fingerDirectionElement) {
+
+        fingerDirectionElement.innerText =
+            directionIsUp
+                ? '↑'
+                : '↓';
+
+    }
+
+
+    const directionArrow =
+        directionIsUp
+            ? '⬆️'
+            : '⬇️';
+
+
+    const directionWord =
+        directionIsUp
+            ? 'UP'
+            : 'DOWN';
+
+
+    const fingerWord =
+        activeChallengeSteps === 1
+            ? 'FINGER'
+            : 'FINGERS';
+
+
     document.getElementById(
         'challenge-prompt-text'
     ).innerText =
-        `If my ${activeChallengeHand} Finger ${activeChallengeStartFinger} is my reference finger, which finger is ${activeChallengeSteps} position${activeChallengeSteps === 1 ? '' : 's'} away?`;
+        `${handName} • Finger ${activeChallengeStartFinger}\n` +
+        `${directionArrow} ${directionWord} ${activeChallengeSteps} ${fingerWord}\n` +
+        `Which finger do you land on?`;
 
 
     document.getElementById(
         'challenge-prompt-subtext'
     ).innerText =
-        `Use the ${activeChallengeHand === 'RH' ? 'right' : 'left'} hand shown to find the destination finger.`;
-
-}
+        `Move ${directionWord.toLowerCase()} from Finger ${activeChallengeStartFinger}.`;
 
 function submitFingerAnswer(
     selectedFinger
