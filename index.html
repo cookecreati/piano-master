@@ -2298,7 +2298,8 @@ function stopChallengeSession() {
     button.classList.add(
         'bg-indigo-600',
         'hover:bg-indigo-500'
-    );
+);
+}
 
     document.getElementById(
         'challenge-prompt-text'
@@ -2954,48 +2955,16 @@ function renderChallengePiano() {
      * Full chromatic keyboard appears.
      */
 
-    let visibleNotes = [];
-
-    if (teacherUnlockedChromaticMode) {
-
-        visibleNotes = [
-            'C',
-            'C#',
-            'D',
-            'D#',
-            'E',
-            'F',
-            'F#',
-            'G',
-            'G#',
-            'A',
-            'A#',
-            'B'
-        ];
-
-       } else {
-
-        /*
-         * Challenge Mode always shows the full
-         * C-major scale so students can see the
-         * complete musical geography.
-         *
-         * Progression still controls which notes
-         * can be used in generated questions.
-         */
-
-        visibleNotes = [
-            'C',
-            'D',
-            'E',
-            'F',
-            'G',
-            'A',
-            'B',
-            'C'
-        ];
-
-    }
+    let visibleNotes = [
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'A',
+    'B',
+    'C'
+];
 
     /*
      * Safety fallback.
