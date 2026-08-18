@@ -1,0 +1,8 @@
+Upload these files to the ROOT of the main branch:
+
+index.html
+404.html
+.nojekyll
+
+Do not upload the containing folder. The repository root should show all three files side by side.
+GitHub Pages source: main branch, /(root), or GitHub Actions Static HTML.
