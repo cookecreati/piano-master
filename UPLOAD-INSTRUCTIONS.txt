@@ -1,0 +1,8 @@
+Piano Master V15.3
+
+GitHub Pages update:
+1. Keep README.md if you want it.
+2. Keep or upload .nojekyll in the repository root.
+3. Replace index.html and 404.html with these V15.3 files.
+4. Commit changes and wait for GitHub Pages deployment to finish.
+5. Test once in a private/incognito window to confirm first-visit Guest Setup appears.
