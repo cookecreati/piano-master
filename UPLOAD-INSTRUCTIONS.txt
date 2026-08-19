@@ -1,2 +1,0 @@
-Piano Master V15.1
-Fixes the Starting Zone first-question freeze. Replace only index.html and 404.html in GitHub Pages. Keep .nojekyll and README.md.
