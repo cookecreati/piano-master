@@ -1,0 +1,31 @@
+PIANO MASTER V15.4 — DEMO STABILIZATION
+
+KEEP in GitHub:
+• README.md
+• .nojekyll
+
+REPLACE:
+• index.html
+• 404.html
+
+WHAT V15.4 FIXES
+• Prevents one Challenge question, especially drag/drop, from scoring repeatedly before the next question loads.
+• Adds purchasable Bonus Bank inventory in the Bonus Shop:
+  Frozen Time, +5 Seconds, Streak Shield, and 2× Points Boost.
+• Adds a 10-second 2× bonus-points boost.
+  Shop price: 20 points.
+  Live Challenge emergency activation: 30 points.
+• Makes Bonus Bank inventory counts visible in the shop.
+• Makes purchased/equipped avatar, background, color, and sound customizations visibly marked.
+• Improves visibility of emoji-themed backgrounds.
+• Preserves V15.3 guest onboarding:
+  Set Up Your Avatar → Set Up Your Piano → Find My Starting Point.
+• Preserves Supabase/cloud data compatibility.
+
+UPLOAD
+1. Delete/replace the current index.html and 404.html in the repository root.
+2. Upload the V15.4 index.html and 404.html.
+3. Leave .nojekyll and README.md in place.
+4. Commit to main.
+5. Wait for GitHub Pages to redeploy.
+6. Hard refresh or use a private window for testing.
